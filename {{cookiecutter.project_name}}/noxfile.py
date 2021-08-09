@@ -1,0 +1,86 @@
+"""Nox sessions."""
+import shutil
+import sys
+from pathlib import Path
+from textwrap import dedent
+
+import nox
+
+try:
+    from nox_poetry import Session
+    from nox_poetry import session
+except ImportError:
+    message = f"""\
+    Nox failed to import the 'nox-poetry' package.
+
+    Please install it using the following command:
+
+    {sys.executable} -m pip install nox-poetry"""
+    raise SystemExit(dedent(message))
+
+package = "{{cookiecutter.package_name}}"
+python_versions = ["3.9", "3.8", "3.7", "3.6"]
+nox.needs_version = ">= 2021.6.6"
+nox.options.sessions = (
+    "pre-commit",
+    "tests",
+    "docs-build",
+)
+
+@session(name="pre-commit", python="3.9")
+def precommit(session: Session) -> None:
+    """Lint using pre-commit."""
+    args = session.posargs or ["run", "--all-files", "--show-diff-on-failure"]
+    session.install(
+        "black",
+        "darglint",
+        "flake8",
+        "flake8-bandit",
+        "flake8-bugbear",
+        "flake8-docstrings",
+        "flake8-rst-docstrings",
+        "pep8-naming",
+        "pre-commit",
+        "pre-commit-hooks",
+        "reorder-python-imports",
+    )
+    session.run("pre-commit", *args)
+    if args and args[0] == "install":
+        activate_virtualenv_in_precommit_hooks(session)
+
+@session(python=python_versions)
+def tests(session: Session) -> None:
+    """Run the test suite."""
+    session.install(".")
+    session.install("coverage[toml]", "pytest", "pygments")
+    try:
+        session.run("coverage", "run", "--parallel", "-m", "pytest", *session.posargs)
+    finally:
+        if session.interactive:
+            session.notify("coverage", posargs=[])
+
+
+@session
+def coverage(session: Session) -> None:
+    """Produce the coverage report."""
+    args = session.posargs or ["report"]
+
+    session.install("coverage[toml]")
+
+    if not session.posargs and any(Path().glob(".coverage.*")):
+        session.run("coverage", "combine")
+
+    session.run("coverage", *args)
+
+@session(name="docs-build", python="3.9")
+def docs_build(session: Session) -> None:
+    """Build the documentation."""
+    args = session.posargs or ["docs", "docs/_build"]
+    session.install(".")
+    session.install("sphinx", "sphinx-click", "sphinx-rtd-theme")
+
+    build_dir = Path("docs", "_build")
+    if build_dir.exists():
+        shutil.rmtree(build_dir)
+
+    session.run("sphinx-build", *args)

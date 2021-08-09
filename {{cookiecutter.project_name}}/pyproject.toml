@@ -4,6 +4,11 @@ version = "{{cookiecutter.version}}"
 description = "{{cookiecutter.friendly_name}}"
 authors = ["{{cookiecutter.author}} <{{cookiecutter.email}}>"]
 license = "{{cookiecutter.license}}"
+{% if cookiecutter.package_name != cookiecutter.project_name.replace('-', '_') -%}
+packages = [
+    { include = "{{cookiecutter.package_name}}", from = "src" },
+]
+{% endif -%}
 
 [tool.poetry.dependencies]
 python = "^3.7"
@@ -15,6 +20,19 @@ Sphinx = "^4.1.2"
 myst-parser = "^0.15.1"
 sphinx-rtd-theme = "^0.5.2"
 pytest = "^6.2.4"
+nox = "^2021.6.12"
+nox-poetry = "^0.8.6"
+
+[tool.coverage.paths]
+source = ["src", "*/site-packages"]
+
+[tool.coverage.run]
+branch = true
+source = ["{{cookiecutter.package_name}}"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 100
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

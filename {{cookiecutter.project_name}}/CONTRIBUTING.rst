@@ -11,7 +11,7 @@ Here is a list of important resources for contributors:
 - `Documentation`_
 - `Issue Tracker`_
 
-.. _{{cookiecutter.license.replace("-", " ")}} license: https://opensource.org/licenses/{{cookiecutter.license}}
+.. _{{cookiecutter.license.replace("-", " ")}} license: https://spdx.org/licenses/{{cookiecutter.license}}.html
 .. _Source Code: https://github.com/{{cookiecutter.github_user}}/{{cookiecutter.project_name}}
 .. _Documentation: https://{{cookiecutter.project_name}}.readthedocs.io/
 .. _Issue Tracker: https://github.com/{{cookiecutter.github_user}}/{{cookiecutter.project_name}}/issues
@@ -70,13 +70,20 @@ Run the full test suite:
 
 .. code:: console
 
-   $ N/A
+   $ poetry run nox
 
 List the available Nox sessions:
 
 .. code:: console
 
-   $ N/A
+   $ poetry run nox --list-sessions
+
+You can also run a specific Nox session.
+For example, invoke the unit test suite like this:
+
+.. code:: console
+
+   $ poetry run nox --session=tests
 
 Unit tests are located in the ``tests`` directory,
 and are written using the pytest_ testing framework.
@@ -102,4 +109,3 @@ It is recommended to open an issue before starting work on anything.
 This will allow a chance to talk it over with the owners and validate your approach.
 
 .. _pull request: https://github.com/{{cookiecutter.github_user}}/{{cookiecutter.project_name}}/pulls
-.. github-only
