@@ -4,9 +4,10 @@ My cookiecutter template based on https://github.com/cjolowicz/cookiecutter-hype
 
 ## What do I embed?
 
-* [x] Documention [sphinx](https://www.sphinx-doc.org)
-* [x] Unit test [pytest](https://docs.pytest.org)
-* [x] Dependancy [poetry](https://python-poetry.org/)
+* [x] Documention with [sphinx](https://www.sphinx-doc.org)
+* [x] Unit test with [pytest](https://docs.pytest.org)
+* [x] Dependancy with [poetry](https://python-poetry.org/)
 * [x] Using [nox](https://nox.thea.codes)
-* [x] Coverage [coverage.py](https://coverage.readthedocs.io)
+* [x] Coverage with [coverage.py](https://coverage.readthedocs.io)
 * [x] Git hooks with [pre-commit](https://pre-commit.com/)
+* [x] Python style checking with [flake8](https://flake8.pycqa.org)

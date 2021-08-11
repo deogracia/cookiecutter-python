@@ -27,9 +27,66 @@ nox.options.sessions = (
     "docs-build",
 )
 
+
+def activate_virtualenv_in_precommit_hooks(session: Session) -> None:
+    """Activate virtualenv in hooks installed by pre-commit.
+
+    This function patches git hooks installed by pre-commit to activate the
+    session's virtual environment. This allows pre-commit to locate hooks in
+    that environment when invoked from git.
+
+    Args:
+        session: The Session object.
+    """
+    if session.bin is None:
+        return
+
+    virtualenv = session.env.get("VIRTUAL_ENV")
+    if virtualenv is None:
+        return
+
+    hookdir = Path(".git") / "hooks"
+    if not hookdir.is_dir():
+        return
+
+    for hook in hookdir.iterdir():
+        if hook.name.endswith(".sample") or not hook.is_file():
+            continue
+
+        text = hook.read_text()
+        bindir = repr(session.bin)[1:-1]  # strip quotes
+        if not (
+            Path("A") == Path("a") and bindir.lower() in text.lower() or bindir in text
+        ):
+            continue
+
+        lines = text.splitlines()
+        if not (lines[0].startswith("#!") and "python" in lines[0].lower()):
+            continue
+
+        header = dedent(
+            f"""\
+            import os
+            os.environ["VIRTUAL_ENV"] = {virtualenv!r}
+            os.environ["PATH"] = os.pathsep.join((
+                {session.bin!r},
+                os.environ.get("PATH", ""),
+            ))
+            """
+        )
+
+        lines.insert(1, header)
+        hook.write_text("\n".join(lines))
+
+
 @session(name="pre-commit", python="3.9")
 def precommit(session: Session) -> None:
-    """Lint using pre-commit."""
+    """Lint using pre-commit.
+
+    Args:
+        session (Session): session object
+
+    """
     args = session.posargs or ["run", "--all-files", "--show-diff-on-failure"]
     session.install(
         "black",
@@ -48,9 +105,15 @@ def precommit(session: Session) -> None:
     if args and args[0] == "install":
         activate_virtualenv_in_precommit_hooks(session)
 
+
 @session(python=python_versions)
 def tests(session: Session) -> None:
-    """Run the test suite."""
+    """Run the test suite.
+
+    Args:
+        session (Session): session object
+
+    """
     session.install(".")
     session.install("coverage[toml]", "pytest", "pygments")
     try:
@@ -62,7 +125,12 @@ def tests(session: Session) -> None:
 
 @session
 def coverage(session: Session) -> None:
-    """Produce the coverage report."""
+    """Produce the coverage report.
+
+    Args:
+        session (Session): session object
+
+    """
     args = session.posargs or ["report"]
 
     session.install("coverage[toml]")
@@ -72,10 +140,16 @@ def coverage(session: Session) -> None:
 
     session.run("coverage", *args)
 
+
 @session(name="docs-build", python="3.9")
 def docs_build(session: Session) -> None:
-    """Build the documentation."""
-    args = session.posargs or ["docs", "docs/_build"]
+    """Build the documentation.
+
+    Args:
+        session (Session): session object
+
+    """
+    args = session.posargs or ["docs/sources", "docs/build"]
     session.install(".")
     session.install("sphinx", "sphinx-click", "sphinx-rtd-theme")
 

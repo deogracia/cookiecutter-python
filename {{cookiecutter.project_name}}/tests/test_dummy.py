@@ -1,3 +1,9 @@
+"""Test dummy."""
+
+
 class TestDummy:
-  def test_version(self):
-      assert 1+1 == 2
+    """Test à supprimer/modifier."""
+
+    def test_version(self):
+        """Function de test."""
+        assert 1 + 1 == 2
