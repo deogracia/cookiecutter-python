@@ -42,9 +42,24 @@ Request features on the `Issue Tracker`_.
 How to set up your development environment
 ------------------------------------------
 
-You need Python 3.7+ and the following tools:
+You need Python 3.6+ and the following tools:
 
+- Pyenv_
 - Poetry_
+
+Install the needed python version by looking in the .python-version file
+
+.. code:: console
+
+  $ cat .python-version
+  # 3.7.11
+  # 3.8.11
+  # 3.9.6
+  # 3.6.14
+  $ pyenv install 3.7.11
+  $ pyenv install 3.8.11
+  $ pyenv install 3.9.6
+  $ pyenv install 3.6.14
 
 Install the package with development requirements:
 
@@ -60,6 +75,7 @@ or the command-line interface:
    $ poetry run python
    $ poetry run {{cookiecutter.project_name}}
 
+.. _Pyenv: https://github.com/pyenv/pyenv
 .. _Poetry: https://python-poetry.org/
 
 

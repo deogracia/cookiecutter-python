@@ -11,3 +11,4 @@ My cookiecutter template based on https://github.com/cjolowicz/cookiecutter-hype
 * [x] Coverage with [coverage.py](https://coverage.readthedocs.io)
 * [x] Git hooks with [pre-commit](https://pre-commit.com/)
 * [x] Python style checking with [flake8](https://flake8.pycqa.org)
+* [x] Multiple python version with [pyenv](https://github.com/pyenv/pyenv)
