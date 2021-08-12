@@ -1,7 +1,7 @@
 """{{cookiecutter.friendly_name}}."""
 
 
-def add_one(number):
+def add_one(number: int) -> int:
     """Add one to 'number'.
 
     Args:
