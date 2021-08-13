@@ -9,5 +9,10 @@ def add_one(number: int) -> int:
 
     Returns:
         integer
+
+
+    Example:
+        >>> assert add_one(0) == 1
+        >>> assert add_one(10) == 11
     """
     return number + 1

@@ -24,6 +24,7 @@ nox = "^2021.6.12"
 nox-poetry = "^0.8.6"
 flake8 = "^3.9.2"
 mypy = "^0.910"
+xdoctest = {extras = ["colors"], version = "^0.15.6"}
 
 [tool.coverage.paths]
 source = ["src", "*/site-packages"]

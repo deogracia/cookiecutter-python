@@ -15,3 +15,4 @@ My cookiecutter template based on https://github.com/cjolowicz/cookiecutter-hype
 * [x] Static type checking with [mypy](http://mypy-lang.org/)
 * [x] A bit of security with [Bandit](https://github.com/PyCQA/bandit) & [safety](https://github.com/pyupio/safety)
 * [x] Runtime type checking with [Typeguard](https://github.com/agronholm/typeguard)
+* [x] Doctest with [xdoctest](https://github.com/Erotemic/xdoctest)
