@@ -1,0 +1,10 @@
+{
+  "project_name":  "mon-projet-python",
+  "package_name":  "{{ cookiecutter.project_name.replace('-', '_') }}",
+  "friendly_name": "{{ cookiecutter.project_name.replace('-', ' ').title() }}",
+  "author":        "Lionel Félicité",
+  "email":         "deogracia@free.fr",
+  "github_user":   "deogracia",
+  "version":       "0.0.0",
+  "license":       ["BSD-3-Clause-Clear"]
+}
